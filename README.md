@@ -1,5 +1,5 @@
 # Ex.05 Design a Website for Server Side Processing
-## Date: 29-04-2024
+## Date:02-04-2024
 
 ## AIM:
 To design a website to find surface area of a Right Cylinder in server side.
@@ -30,128 +30,138 @@ Create a HTML file to implement form based input and output.
 Publish the website in the given URL.
 
 ## PROGRAM :
-### math.html
 ```
+math.html
+
 <html>
 <head>
-   
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    
-    <title>SURFACE AREA OF CYLINDER</title>
-
+    <title>Surface Area</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <style type="text/css">
-
         body {
-            background-color:rgb(10, 218, 245);
+            background-color: yellow;
         }
-
         .edge {
-            display: flex;
-            height: 100vh;
-            width: 100%;    
-            justify-content: center;
-            align-items: center;
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding-top: 20px;
+            text-align: center;  /* Added text-align center */
         }
-
         .box {
-            display: block;
-            width: 550px;
+            border: thick dashed blue;
+            width: 500px;
             min-height: 300px;
             font-size: 20px;
-            background-color: rgb(6, 102, 227);
-            border-radius: 10px;
-            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            background-color: blue;
+            padding: 20px;
+            box-sizing: border-box;
+            display: inline-block;  /* Added display inline-block */
         }
-
         .formelt {
-            color:black;
+            color: yellowgreen;
             text-align: center;
             margin-top: 7px;
             margin-bottom: 6px;
         }
-
         h1 {
-            color:rgb(0, 0, 0);
+            color: rgb(255, 0, 179);
             text-align: center;
             padding-top: 20px;
+            margin-bottom: 0;
         }
-        input{
-            margin: 5px;
-            padding: 5px;
-            border-radius: 5px;
-            border: none;
-
+        .input-container {
+            margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
+    <h1>ANU VARSHINI M B</h1>
+    <h1>212223240010</h1>
     <div class="edge">
         <div class="box">
-             <h1>KARTHIKEYAN M(212223110020)</h1>
-            <h1>Surface Area of Cylinder </h1>
-
+            <h1>Surface Area of Right Cylinder</h1>
             <form method="POST">
                 {% csrf_token %}
-                <div class="formelt">
-               Radius : <input type="text" name="radius" value="{{r}}"></input>(in m)<br/>
+                <div class="input-container">
+                    <div class="formelt">
+                        Radius : <input type="text" name="radius" value="{{ r }}"></input>(in m)
+                    </div>
+                </div>
+                <div class="input-container">
+                    <div class="formelt">
+                        Height : <input type="text" name="height" value="{{ h }}"></input>(in m)
+                    </div>
                 </div>
                 <div class="formelt">
-                Height : <input type="text" name="height" value="{{h}}"></input>(in m)<br/>
+                    <input type="submit" value="Calculate"></input>
                 </div>
                 <div class="formelt">
-                <input type="submit" value="Calculate"></input><br/>
+                    Area : <input type="text" name="area" value="{{ area }}"></input>m<sup>2</sup>
                 </div>
-                <div class="formelt">
-                Area : <input type="text" name="area" value="{{area}}"></input>m<sup>2</sup><br/>
             </form>
         </div>
     </div>
 </body>
 </html>
+
 ```
-### views.py
 ```
+views.py
+
 from django.shortcuts import render
-def cylinarea(request):
+
+def surfacearea(request):
     context = {}
     context['area'] = "0"
     context['r'] = "0"
     context['h'] = "0"
+
     if request.method == 'POST':
         print("POST method is used")
-        print('request.POST:', request.POST)
-        r = request.POST.get('radius', '0') 
-        h = request.POST.get('height', '0') 
-        print('radius =', r)
-        print('height =', h)
-        area = 2 * 3.14 * int(r) * int(h) + 2*3.14*int(r)*int(r)
-        context['area'] = area
-        context['r'] = r
-        context['h'] = h
-        print('Area =', area)
-    
-    return render(request, 'mathapp/math.html',context)
+        r = request.POST.get('radius', '0')
+        h = request.POST.get('height', '0')
+        print('Radius=', r)
+        print('Height=', h)
+
+        try:
+            r = float(r)
+            h = float(h)
+            area = (2 * 3.14159 * r * h) + (2 * 3.14159 * r * r)
+            context['area'] = round(area, 2)
+            context['r'] = str(r)
+            context['h'] = str(h)
+            print('Area=', area)
+        except ValueError:
+            print('Invalid input for radius or height.')
+
+    return render(request, 'mathapp/math.html', context)
+
 ```
-### urls.py
 ```
+urls.py
+
 from django.contrib import admin
 from django.urls import path
 from mathapp import views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('surfaceareaofcylinder/',views.cylinarea,name="surfaceareaofcylinder"),
-    path('',views.cylinarea,name="surfaceareaofcylinder")
+    path('surfacearea/', views.surfacearea, name="surfacearea"),
+    path('', views.surfacearea, name="surfacearearoot")
 ]
 ```
 
 ## SERVER SIDE PROCESSING:
-![alt text](<Screenshot 2024-04-29 094014.png>)
+![Screenshot 2024-05-13 163937](https://github.com/Loveboysubi/MathServer/assets/138970879/71dfb487-886f-4539-b890-0df8289874fe)
+
 
 ## HOMEPAGE:
-![alt text](<Screenshot 2024-04-29 093904.png>)
+![Screenshot 2024-05-13 164012](https://github.com/Loveboysubi/MathServer/assets/138970879/d2db4101-7c70-40fe-b436-3f7d4519de87)
+
+
 
 ## RESULT:
 The program for performing server side processing is completed successfully.
